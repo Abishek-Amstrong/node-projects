@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const tasks = require('./routes/tasks');
 const connectDB = require('./db/connect');
+require('dotenv').config(); // To pass the connection string from env file
 
 // middleware
 app.use(express.json()); // parses incoming JSON requests and puts the parsed data in req.body.
@@ -23,7 +24,7 @@ const port = 3000;
 
 const start = async () => {
     try {
-        await connectDB();
+        await connectDB(process.env.MONGO_URI);
         app.listen(port, console.log(`Server is listening on port ${port}...`));
     } catch (error) {
         console.log(error);
