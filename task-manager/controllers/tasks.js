@@ -49,7 +49,9 @@ const deleteTask = async (req, res) => {
             return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
         }
 
-        res.status(200).json({ task });
+        // res.status(200).json({ task });
+        // res.status(200).send();
+        res.status(200).json({ task: null, status: 'success' });
     } catch (error) {
         res.status(500).json({ msg: error });
     }
