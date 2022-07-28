@@ -5,12 +5,10 @@ const connectDB = require('./db/connect');
 require('dotenv').config(); // To pass the connection string from env file
 
 // middleware
+app.use(express.static('./public'));
 app.use(express.json()); // parses incoming JSON requests and puts the parsed data in req.body.
 
 // routes
-app.get('/hello', (req, res) => {
-    res.send('Task Manager App');
-})
 
 app.use('/api/v1/tasks', tasks);
 
