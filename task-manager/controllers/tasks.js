@@ -1,5 +1,6 @@
 const Task = require('../models/Task');
 const asyncWrapper = require('../middleware/async');
+const { createCustomError } = require('../errors/custom-error');
 
 // const getAllTasks = async (req, res) => {
 //     try {
@@ -47,12 +48,13 @@ const createTask = asyncWrapper(async (req, res) => {
 //     // res.json({ id: req.params.id });
 // }
 
-const getTask = asyncWrapper(async (req, res) => {
+const getTask = asyncWrapper(async (req, res, next) => {
     const { id: taskID } = req.params;
     const task = await Task.findOne({ _id: taskID }); // Reference - https://mongoosejs.com/docs/api.html#model_Model-findOne
 
     if (!task) {
-        return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
+        return next(createCustomError(`No tasks with id: ${taskID}`, 404));
+        // return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
     }
 
     res.status(200).json({ task });
@@ -84,7 +86,8 @@ const updateTask = asyncWrapper(async (req, res) => {
     });
 
     if (!task) {
-        return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
+        return next(createCustomError(`No tasks with id: ${taskID}`, 404));
+        // return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
     }
     res.status(200).json({ task });
 });
@@ -99,7 +102,8 @@ const editTask = async (req, res) => { // Put request
         }); // Reference - https://mongoosejs.com/docs/api.html#model_Model-findOneAndUpdate
 
         if (!task) {
-            return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
+            return next(createCustomError(`No tasks with id: ${taskID}`, 404));
+            // return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
         }
         res.status(200).json({ task });
     } catch (error) {
@@ -131,7 +135,8 @@ const deleteTask = asyncWrapper(async (req, res) => {
     const task = await Task.findOneAndDelete({ _id: taskID }); // Reference - https://mongoosejs.com/docs/api.html#model_Model-findOneAndDelete
 
     if (!task) {
-        return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
+        return next(createCustomError(`No tasks with id: ${taskID}`, 404));
+        // return res.status(404).json({ msg: `No tasks with id: ${taskID}` });
     }
 
     res.status(200).json({ task: null, status: 'success' });

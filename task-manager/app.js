@@ -4,6 +4,7 @@ const tasks = require('./routes/tasks');
 const connectDB = require('./db/connect');
 require('dotenv').config(); // To pass the connection string from env file
 const notFound = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
 
 // middleware
 app.use(express.static('./public'));
@@ -12,6 +13,7 @@ app.use(express.json()); // parses incoming JSON requests and puts the parsed da
 // routes
 app.use('/api/v1/tasks', tasks);
 app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 // app.get('api/v1/tasks')  get all the tasks
 // app.post('api/v1/tasks')  To create a new task
@@ -19,7 +21,7 @@ app.use(notFound);
 // app.patch('api/v1/tasks/:id')  To edit a task
 // app.delete('api/v1/tasks/:id')  To delete a task
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const start = async () => {
     try {
