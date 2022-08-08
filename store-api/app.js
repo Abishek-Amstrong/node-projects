@@ -1,1 +1,5 @@
-console.log('04 Store API')
+require('dotenv').config()
+// async errors
+
+const express = require('express');
+const app = express();
